@@ -1,0 +1,56 @@
+# Scripts/tests I wrote
+scripts/
+testroom/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+*.egg-info/
+*.pyp
+*.pyd
+.Python
+
+# Django
+*.log
+*.pot
+*.db
+db.sqlite3
+migrations/
+staticfiles/
+
+
+# macOS
+.DS_Store
+
+# VSCode
+.vscode/
+
+# Ignore environment-specific settings
+.env
+
+# Ignore secret keys and credentials
+*.secret
+secure.py
+
+# Ignore data folder and its contents
+data/
+
+# Ignore user-specific configuration files
+*.bak
+*.swp
+*~
+
+# Ignore package manager files
+node_modules/
+package-lock.json
+
+# Ignore local development server settings
+*.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignore deployment-specific files
+deploy/

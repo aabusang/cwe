@@ -1,0 +1,20 @@
+{% extends 'datashow/base.html' %}
+{% load static %}
+<script src="{% static 'datashow/js/charts.js'%}"></script>
+
+{% block content %}
+    {% if btc_objs %}
+        <h1 style="margin: 20px">{{ river_name }}</h1>
+
+        <div id="btc_chart"></div>
+
+        <script>
+            console.log("{{ btc_objs | safe }}")
+            const data = {{ btc_objs | safe }}
+            drawChart(data)
+        </script>
+
+{% else %}
+    <h1>No data, my boy. Go back and look</h1>
+{% endif %}
+{% endblock content %}

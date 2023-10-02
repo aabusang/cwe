@@ -1,0 +1,101 @@
+body {
+    background: #fafafa;
+    color: #333333;
+    margin-top: 3rem;
+}
+
+.left-brand {
+    font-size: 2rem;
+    font-weight: 500;
+    color: #333;
+  }
+  
+
+.nav-item {
+    list-style: none;
+}
+
+.nav-item > a {
+    font-size: 1.2rem;
+    text-decoration: none;
+}
+
+.cta-hero {
+    display: flex;
+    align-items: center;
+    margin: 2rem 0;
+    flex-direction: row;
+}
+.cta {
+    width: 60%;
+    margin-right: 2rem;
+}
+.cta > h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    line-height: 2.5rem;
+}
+.cta > button {
+    margin: 15px;
+    width: 200px;
+    height: 50px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.cta > button:focus {
+    border: 1px solid #aaa;
+    outline: #333;
+}
+.explore-btn{
+    margin-left: 15px;
+}
+.upload-btn{
+    color: #333;
+    border: 1px solid #ccc;
+}
+.hero-image, .tech-doc > img{
+    width: 40%;
+}
+.hero-image, .tech-doc > img{
+    border-radius: 3%;
+}
+
+/* Beginning of Charts page */
+.river-names {
+    line-height: 2rem;
+    width: 150px;
+}
+.river_names{
+    text-align: center;
+    width: 200px;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    font-size: 16px;
+}
+.river_names:focus{
+    outline: none;
+    border: 1px solid #aaa;
+    
+}
+.current-river {
+    background-color: #ccc;
+}
+
+.submit-btn {
+    margin: 15px;
+    width: 200px;
+    height: 35px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    cursor: pointer;
+}
+.submit-btn:focus {
+    border: 1px solid #aaa;
+    outline: #333;
+}

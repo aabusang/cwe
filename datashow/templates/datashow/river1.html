@@ -1,0 +1,70 @@
+{% extends 'datashow/base.html' %}
+{% load static %}
+
+{% block content %}
+    {% if btc_data %}
+        <h1 style="margin: 20px">{{ river_name }}</h1>
+
+        {% for btc_list in btc_data %}
+
+            {% with chart_id="btc-line-chart-"|add:forloop.counter %}
+                {{forloop.counter}}
+                <h3>Sheet Name: {{ btc_list.0.sheet_name }}</h3>
+                <p>Time: {{ btc_list.0.time }}</p>
+                <p>Concentration: {{ btc_list.0.concentration }}</p>
+                <svg id="{{ chart_id }}"></svg>
+
+                <script>
+                    const chartId{{ forloop.counter }} = "{{ chart_id }}";
+
+                    // Set the dimensions and margins of the chart
+                    const margin{{ forloop.counter }} = { top: 20, right: 20, bottom: 30, left: 50 };
+                    const width{{ forloop.counter }} = 600 - margin{{ forloop.counter }}.left - margin{{ forloop.counter }}.right;
+                    const height{{ forloop.counter }} = 400 - margin{{ forloop.counter }}.top - margin{{ forloop.counter }}.bottom;
+
+                    // Create an SVG container
+                    const svg{{ forloop.counter }} = d3.select("#chart_id" + chartId{{ forloop.counter }})
+                        .attr("width", width{{ forloop.counter }} + margin{{ forloop.counter }}.left + margin{{ forloop.counter }}.right)
+                        .attr("height", height{{ forloop.counter }} + margin{{ forloop.counter }}.top + margin{{ forloop.counter }}.bottom)
+                        .append("g")
+                        .attr("transform", `translate(${margin{{ forloop.counter }}.left},${margin{{ forloop.counter }}.top})`);
+
+                    // Create scales for x and y axes
+                    const xScale{{ forloop.counter }} = d3.scaleLinear()
+                        .domain(d3.extent(btc{{ forloop.counter }}, d => d.time))
+                        .range([0, width{{ forloop.counter }}]);
+
+                    const yScale{{ forloop.counter }} = d3.scaleLinear()
+                        .domain([0, d3.max(btc{{ forloop.counter }}, d => d.concentration)])
+                        .range([height{{ forloop.counter }}, 0]);
+
+                    // Create the line generator
+                    const line{{ forloop.counter }} = d3.line()
+                        .x(d => xScale{{ forloop.counter }}(d.time))
+                        .y(d => yScale{{ forloop.counter }}(d.concentration));
+
+                    // Draw the line chart
+                    svg{{ forloop.counter }}.append("path")
+                        .datum(btc{{ forloop.counter }})
+                        .attr("fill", "none")
+                        .attr("stroke", "steelblue")
+                        .attr("stroke-width", 1.5)
+                        .attr("d", line{{ forloop.counter }});
+
+                    // Add x and y axes
+                    svg{{ forloop.counter }}.append("g")
+                        .attr("transform", `translate(0, ${height{{ forloop.counter }}})`)
+                        .call(d3.axisBottom(xScale{{ forloop.counter }}));
+
+                    svg{{ forloop.counter }}.append("g")
+                        .call(d3.axisLeft(yScale{{ forloop.counter }})); 
+                </script>
+            {% endwith %}
+        {% endfor %}
+
+
+    {% else %}
+        <h1>No data, my boy. Go back and look</h1>
+    {% endif %}
+
+{% endblock content %}
