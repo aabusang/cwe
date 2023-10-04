@@ -1,1 +1,1 @@
-web: gunicorn tracer.wsgi
+web: gunicorn tracer.wsgi:application
