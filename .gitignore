@@ -2,6 +2,10 @@
 scripts/
 testroom/
 
+# virtual environment
+venva/
+
+
 # Python
 __pycache__/
 *.py[cod]
@@ -44,7 +48,6 @@ data/
 
 # Ignore package manager files
 node_modules/
-package-lock.json
 
 # Ignore local development server settings
 *.env.local

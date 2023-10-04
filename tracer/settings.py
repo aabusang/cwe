@@ -11,10 +11,14 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os 
+# from dotenv import load_dotenv
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -25,7 +29,7 @@ SECRET_KEY = 'django-insecure-n)-fbxf3oimc)j^859ij2ai^1k@r^u@u47whc0ekck5rw$49ev
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -87,14 +91,25 @@ DATABASES = {
     #     'HOST': '',
     #     'PORT': '5432'
     # },
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': '',
+    #     'USER': 'postgres',
+    #     'PASSWORD': '2001',
+    #     'HOST': '',
+    #     'PORT': '5432'
+    # },
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'test_tracer1',
+        'NAME': 'railway',
         'USER': 'postgres',
-        'PASSWORD': '2001',
-        'HOST': '',
-        'PORT': '5432'
+        'PASSWORD': 'Kn2QWqx8VnqIRA9FGyeL',
+        'HOST': 'containers-us-west-155.railway.app',
+        'PORT': '7777'
     },
+    
+    # 'default': dj_database_url.config()
+
 }
 
 
