@@ -1,7 +1,7 @@
+import os
 from .base import * 
 
-SECRET_KEY = 'django-insecure-n)-fbxf3oimc)j^859ij2ai^1k@r^u@u47whc0ekck5rw$49ev'
-
+SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost']
