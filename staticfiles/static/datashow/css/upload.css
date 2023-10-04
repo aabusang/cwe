@@ -1,0 +1,29 @@
+.submit-data {
+    /* text-align: center; */
+    margin-top: 3rem;
+    background-color: #fafafa;
+}
+
+.upload-form{
+    width: 40%;
+    height: auto;
+    margin: 2rem 0;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.boxes {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.boxes div {
+    flex-basis: calc(33% - 1rem);
+    display: flex;
+    flex-direction: column;
+}
