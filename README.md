@@ -1,4 +1,4 @@
-# Project Name
+# Solute Tracer Data Explorer
 
 This Django project is designed to visualize solute tracer data, offering a comprehensive web interface for users to explore, visualize, and download time-series data related to river databases.
 
