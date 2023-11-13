@@ -1,3 +1,80 @@
+document.addEventListener("DOMContentLoaded", function() {
+    const tooltips = document.querySelectorAll(".tooltip-label");
+
+    tooltips.forEach(function(tooltip) {
+        tooltip.addEventListener("mouseenter", function(event) {
+            const helpText = event.target.getAttribute('data-help-text');
+            if (!helpText) return;
+
+            const tooltipDiv = document.createElement('div');
+            tooltipDiv.className = 'custom-tooltip';
+            tooltipDiv.textContent = helpText;
+            
+            const rect = event.target.getBoundingClientRect();
+            tooltipDiv.style.left = `${rect.right}px`;
+            tooltipDiv.style.top = `${rect.top}px`;
+
+            document.body.appendChild(tooltipDiv);
+
+            // Remove the tooltip when mouse is moved away
+            tooltip.addEventListener("mouseleave", function() {
+                document.body.removeChild(tooltipDiv);
+            });
+        });
+    });
+});
+
+
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Add event listeners to the flow_rate and channel_width inputs
+    const fields = ['id_flow_rate', 'id_channel_width'];
+    fields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        field.addEventListener('input', validateField);
+    });
+});
+
+function validateField(event) {
+    const value = event.target.value;
+    const pattern = /^\d+(\.\d+)?(-\d+(\.\d+)?)?$/;
+
+    // Helper function to remove the error message
+    function removeErrorMessage() {
+        const errorMessage = document.getElementById(event.target.id + '_error');
+        if (errorMessage) errorMessage.remove();
+    }
+
+    // If the field is empty, remove any error messages and validation styles
+    if (!value.trim()) {
+        event.target.classList.remove('valid', 'invalid');
+        removeErrorMessage();
+        return;
+    }
+
+    // Check if the value matches the expected pattern
+    if (pattern.test(value)) {
+        event.target.classList.remove('invalid');
+        event.target.classList.add('valid');
+        removeErrorMessage();
+    } else {
+        event.target.classList.remove('valid');
+        event.target.classList.add('invalid');
+        // Add error message if not present
+        let errorMessage = document.getElementById(event.target.id + '_error');
+        if (!errorMessage) {
+            errorMessage = document.createElement('div');
+            errorMessage.id = event.target.id + '_error';
+            errorMessage.textContent = "Please enter a valid number or range.";
+            errorMessage.style.color = 'red';
+            event.target.parentNode.insertBefore(errorMessage, event.target.nextSibling);
+        }
+    }
+}
+
+
+
 
 function handleBtns(btnID) {
     if (btnID == "explore") {

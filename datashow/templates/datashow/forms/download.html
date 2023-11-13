@@ -1,0 +1,18 @@
+<form method="post">
+    {% csrf_token %}
+    
+    <div>
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+    </div>
+    {% comment %} <div>
+        <label for="{{ download_form.timeseries_data.label }}">{{ download_form.timeseries_data.label }}</label>
+        <input type="checkbox" id="{{ download_form.timeseries_data.label }}" name="{{ download_form.timeseries_data.name }}">
+    </div> {% endcomment %}
+
+    <button type="submit" >Download</button>
+
+</form>

@@ -12,9 +12,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os 
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -46,6 +47,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
+
 ROOT_URLCONF = 'tracer.urls'
 
 TEMPLATES = [
@@ -70,17 +74,20 @@ WSGI_APPLICATION = 'tracer.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+env = environ.Env()
 DATABASES = {
-        'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ['PGDATABASE'],
-        'USER': os.environ['PGUSER'],
-        'PASSWORD': os.environ['PGPASSWORD'],
-        'HOST': os.environ['PGHOST'],
-        'PORT': os.environ['PGPORT'],
-    },
-    
+    'default': env.db('DATABASE_URL', default='postgres://postgres:password@localhost:5432/railway')
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.environ['PGDATABASE'],
+#         'PGUSER': os.environ['PGUSER'],
+#         'PGPASSWORD': os.environ['PGPASSWORD'],
+#         'PGHOST': os.environ['PGHOST'],
+#         'PGPORT': os.environ['PGPORT'],
+#     },
+# }
 
 
 # Password validation

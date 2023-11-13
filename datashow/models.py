@@ -68,35 +68,19 @@ class INJECTION_LOCATION(models.Model):
     class Meta:
         db_table = 'INJECTION_LOCATION'
 
-# ... [other models remain unchanged]
-# This model was normalized (put timedata obscondata, conservcondata) seperate so I won't have to use 
-# postgres ArrayField feature whicl was causing trouble when I tried to run migrations for the sqlite database
+
 class CONC_TIMESERIES(models.Model):
     TSNo = models.AutoField(primary_key=True)
-    Sheet_name = models.CharField(max_length=80)
-    date = models.DateField(null=True)
+    Sheet_name = models.CharField(max_length=100)  
+    Date = models.CharField(max_length=15, blank=True, null=True)
+    Time = models.TextField(blank=True, null=True)
+    Obs_conc = models.TextField(blank=True, null=True)
+    Conserv_conc = models.TextField(blank=True, null=True)
+    Disch_adj_conc = models.TextField(blank=True, null=True)
     TracerNo = models.ForeignKey(INJECTION_TRACER, on_delete=models.CASCADE)
+    
     class Meta:
         db_table = 'CONC_TIMESERIES'
-
-class TimeData(models.Model):
-    timeseries = models.ForeignKey(CONC_TIMESERIES, on_delete=models.CASCADE)
-    time_value = models.CharField(max_length=15)
-
-class ObsConcData(models.Model):
-    timeseries = models.ForeignKey(CONC_TIMESERIES, on_delete=models.CASCADE)
-    obs_conc_value = models.CharField(max_length=15)
-
-class ConservConcData(models.Model):
-    timeseries = models.ForeignKey(CONC_TIMESERIES, on_delete=models.CASCADE)
-    conserv_conc_value = models.CharField(max_length=15)
-
-class DischAdjConcData(models.Model):
-    timeseries = models.ForeignKey(CONC_TIMESERIES, on_delete=models.CASCADE)
-    disch_adj_conc_value = models.CharField(max_length=15)
-
-# ... [other models remain unchanged]
-
 
 class SAMPLING_LOCATION(models.Model):
     SLNo = models.AutoField(primary_key=True)

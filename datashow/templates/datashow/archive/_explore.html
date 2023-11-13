@@ -1,0 +1,197 @@
+{% extends 'datashow/base.html'%}
+{% load static %}
+
+<script src="{% static 'datashow/js/charts.js'%}"></script>
+
+{% block content %}
+
+<div class="container explore">
+    <section id="display-filters">
+
+        <div class="row maps-and-curves exp-visuals">
+            {% if timeseries %}
+                <div id="btc-chart"></div>
+                <script>
+                    const timeseries = {{timeseries | safe}};
+                    console.log("timeseries: ")
+                    console.log(timeseries); 
+                    drawLineChart(timeseries, '#btc-chart');
+                </script>
+                
+            {% comment %} {% else %}
+                <h1>No Time Series Data</h1> {% endcomment %}
+            {% endif %}
+        </div>
+
+        <div class="row maps-and-curves exp-filters">
+            <form method="POST" action="{% url 'explore' %}" id="explore-form">
+                {% csrf_token %}
+                <div class="search-tab">
+                    <!-- Injection Location -->
+                    <div class="tab">
+                        <label for="injection-location">{{form.river_name.label_tag}}</label>
+                        {% if rivers %}
+                            <select id="injection-location" name="injection_location">
+                                <option value="" selected disabled></option>
+                                {% for river in rivers %}
+                                    <option value="{{river}}">{{river}}</option>
+                                {% endfor %}
+                            </select>
+                        {% else %}
+                            <input type="text" id="injection-location" name="injection-location" placeholder="Enter location">
+                        {% endif %}
+                    </div>
+                    <!-- Stream Order -->
+                    <div class="tab">
+                        <label>{{ form.stream_order.label }}</label>
+                        <select id="stream-order" name="stream_order">
+                            <option value="" selected disabled></option>
+                            {% for order in orders%}
+                                <option value="{{order}}">{{order}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    Channel Width 
+                    <div class="tab"> 
+                        <label>{{ form.channel_width.label }}</label>
+                        {{form.channel_width}}
+                        <input type="text" name="channel_width" placeholder="Enter Channel Width">
+                    </div>
+
+                    <!-- Dates -->
+                    <div class="tab date">
+                        <label for="date-range-start">Date Range:</label>
+                        <input type="date" id="from-data" name="from_date">
+                        <span>to</span>
+                        <input type="date" id="to-date" name="to_date">
+                    </div>
+
+                    <!-- Tracer Type -->
+                    <div class="tab">
+                        <label for="tracer-type">{{ form.tracer_type.label }}</label>
+                        {% if tracers %}
+                            <select id="tracer-type" name="tracer_type">
+                                    <option value="" selected disabled></option>
+                                {% for tracer in tracers %}
+                                    <option value="{{tracer}}">{{tracer}}</option>
+                                {% endfor %}
+                            </select>
+                        {% else %}
+                            <option value="none">None</option>
+                        {% endif %}
+                    </div>
+
+                    <!-- Geographic Features -->
+                    <div class="tab geo-tab">
+                        <label for="geographic-features">Geographic Features:</label>
+                        <select id="geographic-features" name="geographic-features">
+                            <option value="" selected disabled></option>
+                            {% if features %}
+                                {% for feature in features %}
+                                    <option value="{{feature}}" id="feature">{{feature}}</option>
+                                {% endfor %}
+                            {% else %}
+                                <option value="none">None</option>
+                            {% endif %}
+                        </select>
+                        <div id="more-feature-data" style="display: none">
+                            <label for="feature-data">Range: </label>
+                            <input type="text" id="feature-data" name="feature-data-range" placeholder="0, 0">
+                        </div>
+                    </div>
+
+                    <!-- Flow Rate / Dishcharge-->
+                    <div class="tab">
+                        <label for="discharge">{{ form.flow_rate.label }}</label>
+                        <input type="text" id="discharge" name="flow_rate" placeholder="0, 0">
+                    </div>
+
+                </div>
+                <div class="tab explore-btns">
+                    <button type="reset" class="btn reset-btn expl-btn" value="Reset">Clear</button>
+                    <button type="submit" class="btn search-btn expl-btn" value="Search">View BTC</button>
+                    {% comment %} <button type="" class="btn expl-btn" value="download">Download</button> {% endcomment %}
+                </div>
+            </form>
+        </div>
+
+
+    </section> <!-- end of visual display filter section -->
+
+
+
+    <!-- Data Download Section -->
+    <section id="download-section">
+        <h2>Download Data</h2>
+        <div>
+            <label>Select what to download:</label>
+            <div>
+                <input type="checkbox" id="timeseries" name="data-choice" value="timeseries">
+                <label for="timeseries">Time Series Data</label>
+            </div>
+            
+            <div>
+                <input type="checkbox" id="injection" name="data-choice" value="injection">
+                <label for="injection">Injection (River Name)</label>
+            </div>
+            
+            <div>
+                <input type="checkbox" id="tracer-type" name="data-choice" value="tracer-type">
+                <label for="tracer-type">Tracer Type</label>
+            </div>
+            
+            <div>
+                <input type="checkbox" id="stream-order" name="data-choice" value="stream-order">
+                <label for="stream-order">Stream Order</label>
+            </div>
+            
+            <div>
+                <input type="checkbox" id="discharge" name="data-choice" value="discharge">
+                <label for="discharge">Discharge</label>
+            </div>
+    
+            <button type="button" class="btn download-btn" onclick="downloadData()">Download</button>
+        </div>
+    </section>
+    
+
+    <section id="loading">
+        <div id="loading-indicator" style="display: none;">
+            <img src="{% static 'path_to_loading_gif.gif' %}" alt="Loading..."> Loading...
+        </div>
+        
+    </section>
+
+
+
+    <!-- Small Stats -->
+    <section id="small-stats">
+        <!-- Display Sheets list -->
+        <div class="stats-list">
+            <h2>Sheets / Injections</h2>
+            <div class="list-container">
+                <ul>
+                    {% for sheet in ss_sheets %}
+                        <li>{{ sheet }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <p><strong>Total Sheets:</strong> {{ ss_sheets|length }}</p>
+        </div>
+
+        <!-- Display Rivers list -->
+        <div class="stats-list">
+            <h2>Rivers List</h2>
+            <div class="list-container">
+                <ul>
+                    {% for river in ss_rivers %}
+                        <li>{{ river }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <p><strong>Total Rivers:</strong> {{ ss_rivers|length }}</p>
+        </div>
+    </section>
+</div>
+
+{% endblock content %}

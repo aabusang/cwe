@@ -1,0 +1,46 @@
+
+{% extends 'datashow/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Your download will include the following data:</h1>
+            <ul>
+                {% if request.session.river_name %}
+                    <li><strong>River Name:</strong> {{ request.session.river_name }}</li>
+                {% endif %}
+                {% if request.session.tracer_type %}
+                    <li><strong>Tracer Type:</strong> {{ request.session.tracer_type }}</li>
+                {% endif %}
+                {% if request.session.from_date and request.session.to_date %}
+                    <li><strong>Dates:</strong> From {{ request.session.from_date }} to {{ request.session.to_date }}</li>
+                {% elif request.session.from_date %}
+                    <li><strong>From Date:</strong> {{ request.session.from_date }}</li>
+                {% elif request.session.to_date %}
+                    <li><strong>To Date:</strong> {{ request.session.to_date }}</li>
+                {% endif %}
+                <li>Metadata</li>
+                <li>Flow Rate</li>
+                <li>Timeseries</li>
+                <li>Channel Width</li>
+            </ul>
+            <form method="post">
+                {% csrf_token %}
+                <div style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-download"></i> Download Data
+                    </button>
+                </div>
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+{% endblock content %}

@@ -17,6 +17,11 @@
         <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
         <script src="{% static 'datashow/js/index.js' %}" defer></script>
         <script src="{% static 'datashow/js/charts.js' %}"></script>
+
+        <!-- Tooltipster -->
+        {% comment %} <link rel="stylesheet" type="text/css" href="datashow/css/tooltipster.css" />
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.0.min.js"></script>
+        <script type="text/javascript" src="datashow/js/jquery.tooltipster.min.js"></script> {% endcomment %}
     </head>
 
 
@@ -26,46 +31,57 @@
             <nav class="navbar bg-body-tertiary">
                 <div class="container-fluid ">
                   <div class="left-brand-parent">
-                    <a class="navbar-brand left-brand" href="{% url 'index' %}">River Solute <br>Project (RSP)</a>
+                      <a class="navbar-brand left-brand" href="{% url 'index' %}">River Solute <br>Project (RSP)</a>
                   </div>
-                  <ul class="nav">
-                      <li class="nav-item">
-                        <a class="nav-link" href="{% url 'about' %}">About</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'home' %}">Home</a>
-                    </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="{% url 'explore' %}">Explore</a>
-                    </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="{% url 'upload' %}">Upload</a>
-                    </li>
-                  </ul>
+                      <ul class="nav">
+                          <li class="nav-item">
+                            <a class="nav-link" href="{% url 'about' %}">About</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" href="{% url 'explore' %}">Explore</a>
+                        {% comment %} </li>
+                          <li class="nav-item">
+                            <a class="nav-link" href="{% url 'upload' %}">Upload</a>
+                        </li> {% endcomment %}
+                        </li>
+                          <li class="nav-item">
+                            <a class="nav-link" href="{% url 'documentation' %}">Documentation</a>
+                        </li>
+                      </ul>
                 </div>
-             </nav>
+            </nav>
+        </div>
 
-             <div class="content" style="min-height: 80vh;">
+
+    <!-- Main Content -->
+    <div class="content mt-4">
+        <div class="row">
+            <!-- Centered column for content -->
+            <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
                 {% block content %}
                 {% endblock content %}
             </div>
         </div>
+    </div>
 
-        <!--
-        <footer class="footer">
-            <div class="container">
-                <span class="text-muted">This is the footer</span>
-                <footer>
-                    <ul>
-                      <li><a href="#">Terms of Service</a></li>
-                      <li><a href="#">Privacy Policy</a></li>
-                      <li><a href="#">Contact Us</a></li>
+
+    <hr>
+      <!-- Footer -->
+      <footer class="footer mt-4" style="margin: 25px">
+        <div class="container">
+            <div class="row">
+                <!-- Centered column for content -->
+                <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
+                    <ul class="d-flex justify-content-between footer-list">
+                        <li><a href="#">Contributors</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Funding</a></li>
                     </ul>
-                  </footer>
+                </div>
             </div>
-        </footer>
-      -->
+        </div>
+      </footer>
 
-      <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+      {% comment %} <script src="https://unpkg.com/htmx.org@1.9.6"></script> {% endcomment %}
     </body>
 </html>
