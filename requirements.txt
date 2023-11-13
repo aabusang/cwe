@@ -6,3 +6,4 @@ whitenoise
 pandas
 openpyxl
 django-environ
+django-cors-headers
