@@ -10,55 +10,7 @@
         </div>
         
         <div class="row maps-and-curves exp-filters">
-            {% comment %} {% include 'datashow/forms/search_data.html' %} {% endcomment %}
-            <form method="POST" action="{% url 'explore' %}" id="explore-form">
-                {% csrf_token %}
-            
-                <div>
-                    {% if form.non_field_errors %}
-                    <div class="alert alert-danger">
-                        {{ form.non_field_errors }}
-                    </div>
-                    {% endif %}
-                </div>
-            
-                <!-- River Name -->
-                <div class="tab">
-                    <label for="{{ form.river_name.id_for_label }}" class="tooltip-label" data-help-text="{{ form.river_name.help_text }}">{{ form.river_name.label }}</label>
-                    {{ form.river_name }}
-                </div>
-            
-                <!-- Channel Width -->
-                <div class="tab">
-                    <label for="{{ form.channel_width.id_for_label }}" class="tooltip-label" data-help-text="{{ form.channel_width.help_text }}">{{ form.channel_width.label }}</label>
-                    {{ form.channel_width }}
-                </div>
-            
-                <!-- Flow Rate -->
-                <div class="tab">
-                    <label for="{{ form.flow_rate.id_for_label }}" class="tooltip-label" data-help-text="{{ form.flow_rate.help_text|safe }}">{{ form.flow_rate.label }}</label>
-                    {{ form.flow_rate }}
-                </div>
-            
-                <!-- Tracer Type -->
-                <div class="tab">
-                    <label for="{{ form.tracer_type.id_for_label }}" class="tooltip-label" data-help-text="{{ form.tracer_type.help_text }}">{{ form.tracer_type.label }}</label>
-                    {{ form.tracer_type }}
-                </div>
-            
-                <!-- Date Range -->
-                <div class="tab date">
-                    <label for="{{ form.from_date.id_for_label }}">Date Range:</label>
-                    {{ form.from_date }}
-                    <span>to</span>
-                    {{ form.to_date }}
-                </div>
-            
-                <div class="tab explore-btns">
-                    <button type="reset" class="btn reset-btn expl-btn">Clear</button>
-                    <button type="submit" name="form_type" value="search" class="btn search-btn expl-btn">Search</button>
-                </div>
-            </form>
+            {% include 'datashow/forms/search_data.html' %}
         </div>
     </section>
 </div>
