@@ -12,8 +12,9 @@ ALLOWED_HOSTS = [
     '*'
     ]
 
-CSRF_TRUSTED_ORIGINS = [
-    # 'https://cwe-development10.up.railway.app', 
-    'https://cwe-testenv.up.railway.app',
-    # 'https://cwe-production.up.railway.app',
-    ]
+CSRF_TRUSTED_ORIGINS = ['cwe-testenv.up.railway.app']
+# CSRF_TRUSTED_ORIGINS = [
+#     'https://cwe-development10.up.railway.app', 
+#     'https://cwe-testenv.up.railway.app',
+#     'https://cwe-production.up.railway.app'
+#     ]
