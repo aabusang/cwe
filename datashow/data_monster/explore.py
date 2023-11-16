@@ -5,6 +5,7 @@ import numpy as np
 from datashow.models import *
 from django.http import StreamingHttpResponse
 from io import StringIO
+from itertools import zip_longest
 
 
 
@@ -282,25 +283,50 @@ class Sheets:
         # Fetch relevant timeseries data based on the search criteria
         time_series_data = Sheets.get_timeseries_data(river_name, tracer_type, from_date, to_date, flow_rate, channel_width)
 
+        # Transpose time_series_data to align it horizontally
+        transposed_data = list(zip_longest(*[Sheets.extract_time_series(entry) for entry in time_series_data], fillvalue=['']*4))
+        # Function to clean and split the data
+        def clean_and_split(data_str):
+            cleaned_data = data_str.strip("[]")  # Remove the brackets
+            return cleaned_data.split(',')  # Split the string into a list
+        # Function to safely get an element from a list or return an empty string if index is out of range
+        def safe_get(lst, idx):
+            return lst[idx] if idx < len(lst) else ''
+
         # Check if any time series data exists, if not, return an empty string
         if not time_series_data:
             return ""
 
+        def clean_and_split(data_str):
+            # Remove brackets and quotes, then split by comma
+            return data_str.strip("[]'").split(',')
+
+        # Function to extend lists to a common length
+        def extend_lists_to_common_length(lists):
+            max_length = max(len(lst) for lst in lists)
+            for lst in lists:
+                lst.extend([''] * (max_length - len(lst)))
+
+        # Function to clean, split the data, and pad it to a uniform length
+        def clean_split_and_pad(data_str, max_length):
+            cleaned_data = data_str.strip("[]'").split(',')
+            return cleaned_data + [''] * (max_length - len(cleaned_data))
+        
         # Write data to CSV
         output = StringIO()
         writer = csv.writer(output)
 
-        # Write expanded metadata
         writer.writerow(['Parameter', 'Units', 'Values', 'Additional Ref'])
         writer.writerow(['River Surveyed', '', river_name if river_name else '', ''])
         writer.writerow(['Channel Width', 'ft', channel_width if channel_width else '', ''])
-        # Fetch additional metadata from related models using the river_name or other search criteria
+
         if river_name:
             injection_location = INJECTION_LOCATION.objects.filter(Name=river_name).first()
             if injection_location:
                 hydro_data = ST_HYDROLOGY.objects.get(pk=injection_location.HydroNo_id)
                 char_data = ST_CHARACTERISTICS.objects.get(pk=injection_location.CharNo_id)
                 geo_data = ST_GEOMORPHOLOGY.objects.get(pk=injection_location.GeoNo_id)
+                
                 writer.writerow(['Flow Rate', 'm3/s', hydro_data.Flow_rate if hydro_data else '', ''])
                 writer.writerow(['Channel Depth', 'm', geo_data.Channel_Depth if geo_data else '', ''])
                 writer.writerow(['Bed Slope', '', geo_data.Bed_slope if geo_data else '', ''])
@@ -309,17 +335,50 @@ class Sheets:
                 writer.writerow(['pH', '', char_data.Ph if char_data else '', ''])
                 writer.writerow(['Dissolved Solids', 'mg/L', char_data.DissSol if char_data else '', ''])
                 writer.writerow(['Tracer Type', '', tracer_type if tracer_type else '', ''])
-        
-        # Write time-series data
-        writer.writerow(['time since injection', 'observed concentration', 'conservative concentration', 'discharge adjusted concentration'])
-        for entry in time_series_data:
-            writer.writerow([entry.Time, entry.Obs_conc, entry.Conserv_conc, entry.Disch_adj_conc])
 
-        # Return the CSV content
+
+
+
+        # Determine the maximum length of any time series
+        max_series_length = max(len(entry.Time.strip("[]'").split(',')) for entry in time_series_data)
+
+        # Organize the data for each entry
+        all_series_data = []
+        for entry in time_series_data:
+            time_list = clean_split_and_pad(entry.Time, max_series_length)
+            obs_conc_list = clean_split_and_pad(entry.Obs_conc, max_series_length)
+            conserv_conc_list = clean_split_and_pad(entry.Conserv_conc, max_series_length)
+            disch_adj_conc_list = clean_split_and_pad(entry.Disch_adj_conc, max_series_length)
+
+            # Combine the data for this series and add to the overall list
+            combined_data = list(zip(time_list, obs_conc_list, conserv_conc_list, disch_adj_conc_list))
+            all_series_data.append(combined_data)
+
+        # Write headers for each time series
+        headers = ['Time since injection', 'Observed concentration', 'Conservative concentration', 'Discharge adjusted concentration']
+        full_header_row = []
+        for _ in range(len(time_series_data)):
+            full_header_row.extend(headers + [' '])
+        writer.writerow(full_header_row)
+
+        # Write the data to CSV, handling each row across all series
+        for i in range(max_series_length):
+            row = []
+            for series_data in all_series_data:
+                row.extend(series_data[i] if i < len(series_data) else [''] * len(headers))
+                row.append('')  # Gap column
+            writer.writerow(row)
+            
+            
+            
         output.seek(0)
         return output.getvalue()
 
 
+    @staticmethod
+    def extract_time_series(entry):
+        # Extract the relevant fields from each entry and return as a list
+        return [entry.Time, entry.Obs_conc, entry.Conserv_conc, entry.Disch_adj_conc]
     
     @staticmethod
     def get_timeseries_data(river_name=None, tracer_type=None, from_date=None, to_date=None, flow_rate=None, channel_width=None):

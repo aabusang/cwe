@@ -8,4 +8,10 @@ SECRET_KEY = os.environ['SECRET_CWE_KEY']
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['cwe-production.up.railway.app']
+ALLOWED_HOSTS = [
+    # 'cwe-development10.up.railway.app',
+    # 'cwe-production.up.railway.app',
+    # 'localhost',
+    # '127.0.0.1',
+    '*'
+    ]

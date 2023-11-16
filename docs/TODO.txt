@@ -1,0 +1,7 @@
+
+for each downloaded sheet:
+    dump all of the meta data
+    time series data in blocks according to their dates and sections
+
+
+Fix the tooltips text being out of place

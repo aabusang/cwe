@@ -26,6 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'datashow.apps.DatashowConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -34,10 +35,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'whitenoise.runserver_nostatic',
-    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -45,8 +47,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 
 ]
 
@@ -81,16 +81,7 @@ env = environ.Env()
 DATABASES = {
     'default': env.db('DATABASE_URL', default='postgres://postgres:password@localhost:5432/railway')
 }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.environ['PGDATABASE'],
-#         'PGUSER': os.environ['PGUSER'],
-#         'PGPASSWORD': os.environ['PGPASSWORD'],
-#         'PGHOST': os.environ['PGHOST'],
-#         'PGPORT': os.environ['PGPORT'],
-#     },
-# }
+
 
 
 # Password validation

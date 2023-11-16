@@ -48,8 +48,8 @@ def explore(request):
     if request.method == "POST" and form.is_valid():
         # Store the search parameters in session
         request.session['river_name'] = form.cleaned_data['river_name']
-        # request.session['flow_rate'] = form.cleaned_data['flow_rate']
-        # request.session['channel_width'] = form.cleaned_data['channel_width']
+        request.session['flow_rate'] = form.cleaned_data['flow_rate']
+        request.session['channel_width'] = form.cleaned_data['channel_width']
         request.session['tracer_type'] = form.cleaned_data['tracer_type']
         request.session['from_date'] = form.cleaned_data['from_date']
         request.session['to_date'] = form.cleaned_data['to_date']
