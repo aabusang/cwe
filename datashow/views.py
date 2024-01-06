@@ -28,11 +28,9 @@ def river(request, river_name):
 def upload(request):
     return render(request, "datashow/upload.html") 
 
-def documentation(request):
-    return render(request, "datashow/documentation.html")
+def docs(request):
+    return render(request, "datashow/docs/docs.html")
 
-def test(request):
-    return render(request, "datashow/test.html")
 
 def explore(request):
     form = ExploreForm(request.POST)
@@ -153,21 +151,6 @@ def download_csv_pre_october_30(request):
         return render(request, "datashow/error.html", {'message': "An error occurred while generating the CSV. Please try again later."})
 
 
-def origina___download_csv(request):
-    try:
-        response = StreamingHttpResponse(stream_csv_data(request), content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="timeseries_data.csv"'
-        return response
-    except Exception as e:
- # Log the detailed error for internal use
-        print(f"Error from download_csv function: {e}")
-        
-        # Show a generic error message to the user
-        user_friendly_message = "An error occurred while processing your request. Please try again."
-        return render(request, "datashow/error.html", {'message': str(e)})
-
-
-
 def explore_form(request):
     if request.method == "GET":
         print("GETTING")
@@ -267,7 +250,6 @@ def explore_old(request):
             # 'ss_sheets':  sorted(ts['sheets']),
         }
     return render(request, 'datashow/explore.html', context)
-
 
 
 # # not found page to deal with the case when the data is not found
